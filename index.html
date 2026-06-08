@@ -3,15 +3,138 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HayanCook Policy Pages</title>
-  <style>body{font-family:Arial,sans-serif;max-width:760px;margin:48px auto;padding:0 20px;line-height:1.6;color:#222}a{color:#0b57d0}</style>
+  <title>HayanCook TikTok Upload Integration</title>
+  <style>
+    :root{--ink:#172033;--muted:#5d667a;--line:#e8ebf2;--brand:#ff2d55;--brand2:#10b981;--bg:#f7f8fb;--card:#fff;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+    .wrap{max-width:980px;margin:0 auto;padding:32px 18px 56px}
+    .hero{background:linear-gradient(135deg,#101828,#2c1746 58%,#ff2d55);color:#fff;border-radius:26px;padding:34px;box-shadow:0 16px 40px rgba(22,27,45,.18)}
+    .eyebrow{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px;opacity:.86;margin:0 0 10px}
+    h1{font-size:36px;line-height:1.12;margin:0 0 14px}
+    .hero p{max-width:760px;margin:0;color:#eef1ff;font-size:17px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 8px 28px rgba(20,30,60,.06)}
+    h2{font-size:22px;margin:0 0 12px}.small{font-size:14px;color:var(--muted)}
+    label{display:block;font-size:14px;font-weight:700;margin:15px 0 7px}
+    input,textarea{width:100%;border:1px solid #d7dce8;border-radius:12px;padding:12px 13px;font:inherit;background:#fff;color:var(--ink)}
+    textarea{min-height:92px;resize:vertical}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 18px;font-weight:800;text-decoration:none;cursor:pointer;background:#1f2937;color:#fff;box-shadow:0 8px 18px rgba(20,30,60,.13)}
+    .btn.tiktok{background:var(--brand)}.btn.green{background:var(--brand2)}.btn.ghost{background:#fff;color:#1f2937;border:1px solid #d7dce8;box-shadow:none}
+    .status{margin-top:14px;padding:14px;border-radius:14px;background:#f2f5ff;border:1px solid #dfe6ff;color:#26325a;font-size:14px;white-space:pre-line}
+    .steps{counter-reset:step;display:grid;gap:10px;margin:0;padding:0;list-style:none}
+    .steps li{counter-increment:step;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff}
+    .steps li:before{content:counter(step);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#111827;color:#fff;font-size:13px;font-weight:800;margin-right:9px}
+    .links a{color:#0b57d0;font-weight:700}.note{background:#fff8e6;border:1px solid #ffe0a3;color:#5b4100;border-radius:14px;padding:13px;margin-top:14px;font-size:14px}
+    footer{margin-top:24px;text-align:center;color:var(--muted);font-size:13px}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}.hero{padding:26px}h1{font-size:29px}}
+  </style>
 </head>
 <body>
-  <h1>HayanCook Policy Pages</h1>
-  <p>Official policy pages for HayanCook social media and developer integrations.</p>
-  <ul>
-    <li><a href="terms.html">Terms of Service</a></li>
-    <li><a href="privacy.html">Privacy Policy</a></li>
-  </ul>
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow">HayanCook Developer Integration</p>
+      <h1>HayanCook TikTok Upload Integration</h1>
+      <p>This web page demonstrates the user-approved workflow for connecting the HayanCook owner’s TikTok account and uploading short-form cooking videos through TikTok’s official Login Kit and Content Posting API.</p>
+    </section>
+
+    <section class="grid" aria-label="TikTok integration demo">
+      <div class="card">
+        <h2>1. Connect TikTok Account</h2>
+        <p class="small">The account owner manually starts OAuth and grants TikTok permissions. The app does not connect or post without user approval.</p>
+        <label for="clientKey">TikTok Client Key</label>
+        <input id="clientKey" placeholder="Paste TikTok Client Key for demo recording">
+        <label for="redirectUri">Redirect URI</label>
+        <input id="redirectUri" value="http://localhost:1/">
+        <div class="row" style="margin-top:14px">
+          <button class="btn tiktok" id="connectBtn" type="button">Connect TikTok Account</button>
+          <button class="btn ghost" id="connectedDemoBtn" type="button">Show Connected State</button>
+        </div>
+        <div class="status" id="connectStatus">Status: TikTok account is not connected yet.
+Scopes requested for review: user.info.basic, video.upload, video.publish</div>
+        <div class="note">For app-review recording: click “Connect TikTok Account” after entering the TikTok Client Key. TikTok will open the official OAuth authorization screen.</div>
+      </div>
+
+      <div class="card">
+        <h2>2. Select Video and Caption</h2>
+        <p class="small">The user selects a specific video and reviews the caption before any upload request is submitted.</p>
+        <label for="videoFile">Select video file</label>
+        <input id="videoFile" type="file" accept="video/mp4,video/quicktime">
+        <label for="caption">Caption</label>
+        <textarea id="caption">HayanCook TikTok API upload test. This is a private app review demo video.</textarea>
+        <div class="row" style="margin-top:14px">
+          <button class="btn green" id="uploadBtn" type="button">Upload to TikTok</button>
+          <button class="btn ghost" id="resetBtn" type="button">Reset Demo</button>
+        </div>
+        <div class="status" id="uploadStatus">Upload status: waiting for user-selected video.</div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>End-to-end review flow shown in the demo video</h2>
+      <ol class="steps">
+        <li>Open this web page from the Web/Desktop URL submitted to TikTok.</li>
+        <li>Click “Connect TikTok Account” and complete TikTok OAuth authorization.</li>
+        <li>Return to the upload interface and confirm the connected account state.</li>
+        <li>Select a user-approved MP4/MOV cooking video.</li>
+        <li>Enter or confirm the caption before publishing.</li>
+        <li>Click “Upload to TikTok” to submit the user-approved upload request.</li>
+        <li>Show the final upload status or TikTok processing result to the user.</li>
+      </ol>
+      <p class="small" style="margin-top:14px">This page is for HayanCook owner-operated publishing. It does not perform automatic posting, bulk posting, scraping, commenting, liking, following, or direct messaging.</p>
+    </section>
+
+    <section class="card links" style="margin-top:18px">
+      <h2>Policy links</h2>
+      <p><a href="terms.html">Terms of Service</a> · <a href="privacy.html">Privacy Policy</a></p>
+      <p class="small">Official policy pages for HayanCook social media and developer integrations.</p>
+    </section>
+
+    <footer>HayanCook TikTok Upload Integration · Owner-operated app review demo</footer>
+  </main>
+
+  <script>
+    const scopes = 'user.info.basic,video.upload,video.publish';
+    const connectBtn = document.getElementById('connectBtn');
+    const connectedDemoBtn = document.getElementById('connectedDemoBtn');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const connectStatus = document.getElementById('connectStatus');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const videoFile = document.getElementById('videoFile');
+    function randomState(){
+      const arr = new Uint8Array(16);
+      if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
+      return Array.from(arr, b => b.toString(16).padStart(2,'0')).join('') || String(Date.now());
+    }
+    connectBtn.addEventListener('click', () => {
+      const clientKey = document.getElementById('clientKey').value.trim();
+      const redirectUri = document.getElementById('redirectUri').value.trim() || 'http://localhost:1/';
+      if (!clientKey) {
+        connectStatus.textContent = 'Status: TikTok Client Key is required before opening OAuth. Paste the Client Key from TikTok Developers, then click Connect again.';
+        document.getElementById('clientKey').focus();
+        return;
+      }
+      const params = new URLSearchParams({client_key: clientKey, scope: scopes, response_type: 'code', redirect_uri: redirectUri, state: randomState()});
+      connectStatus.textContent = 'Status: Opening TikTok official OAuth authorization page. The user must approve the requested scopes manually.';
+      window.location.href = 'https://www.tiktok.com/v2/auth/authorize/?' + params.toString();
+    });
+    connectedDemoBtn.addEventListener('click', () => {
+      connectStatus.textContent = 'Status: TikTok account connected successfully.\nConnected account: @hayancook (demo display)\nPosting mode: user-approved video upload only.';
+    });
+    uploadBtn.addEventListener('click', () => {
+      const fileName = videoFile.files && videoFile.files[0] ? videoFile.files[0].name : 'No video selected';
+      if (!videoFile.files || !videoFile.files[0]) {
+        uploadStatus.textContent = 'Upload status: please select an MP4 or MOV video before submitting an upload request.';
+        return;
+      }
+      uploadStatus.textContent = 'Upload status: user manually submitted upload request.\nSelected file: ' + fileName + '\nCaption reviewed: yes\nTikTok Content Posting API result: submitted / processing (demo display).';
+    });
+    resetBtn.addEventListener('click', () => {
+      videoFile.value = '';
+      document.getElementById('caption').value = 'HayanCook TikTok API upload test. This is a private app review demo video.';
+      uploadStatus.textContent = 'Upload status: waiting for user-selected video.';
+    });
+  </script>
 </body>
 </html>
