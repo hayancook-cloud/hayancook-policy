@@ -51,7 +51,7 @@
           <button class="btn ghost" id="connectedDemoBtn" type="button">Show Connected State</button>
         </div>
         <div class="status" id="connectStatus">Status: TikTok account is not connected yet.
-Scopes requested for review: user.info.basic, video.upload, video.publish</div>
+Scopes requested for login test: user.info.basic</div>
         <div class="note">For app-review recording: add this exact HTTPS Redirect URI in TikTok Login Kit, then click “Connect TikTok Account” after entering the TikTok Client Key. TikTok will open the official OAuth authorization screen.</div>
       </div>
 
@@ -94,7 +94,7 @@ Scopes requested for review: user.info.basic, video.upload, video.publish</div>
   </main>
 
   <script>
-    const scopes = 'user.info.basic,video.upload,video.publish';
+    const scopes = 'user.info.basic';
     const connectBtn = document.getElementById('connectBtn');
     const connectedDemoBtn = document.getElementById('connectedDemoBtn');
     const uploadBtn = document.getElementById('uploadBtn');
