@@ -45,14 +45,14 @@
         <label for="clientKey">TikTok Client Key</label>
         <input id="clientKey" placeholder="Paste TikTok Client Key for demo recording">
         <label for="redirectUri">Redirect URI</label>
-        <input id="redirectUri" value="http://localhost:1/">
+        <input id="redirectUri" value="https://hayancook-cloud.github.io/hayancook-policy/">
         <div class="row" style="margin-top:14px">
           <button class="btn tiktok" id="connectBtn" type="button">Connect TikTok Account</button>
           <button class="btn ghost" id="connectedDemoBtn" type="button">Show Connected State</button>
         </div>
         <div class="status" id="connectStatus">Status: TikTok account is not connected yet.
 Scopes requested for review: user.info.basic, video.upload, video.publish</div>
-        <div class="note">For app-review recording: click “Connect TikTok Account” after entering the TikTok Client Key. TikTok will open the official OAuth authorization screen.</div>
+        <div class="note">For app-review recording: add this exact HTTPS Redirect URI in TikTok Login Kit, then click “Connect TikTok Account” after entering the TikTok Client Key. TikTok will open the official OAuth authorization screen.</div>
       </div>
 
       <div class="card">
@@ -102,6 +102,12 @@ Scopes requested for review: user.info.basic, video.upload, video.publish</div>
     const connectStatus = document.getElementById('connectStatus');
     const uploadStatus = document.getElementById('uploadStatus');
     const videoFile = document.getElementById('videoFile');
+    const currentParams = new URLSearchParams(window.location.search);
+    if (currentParams.get('code')) {
+      connectStatus.textContent = 'Status: TikTok OAuth redirected back successfully.\nAuthorization code is present in the URL.\nFor local token exchange, use the full browser URL plus the saved PKCE code_verifier from this session.';
+    } else if (currentParams.get('error')) {
+      connectStatus.textContent = 'Status: TikTok OAuth returned an error: ' + currentParams.get('error');
+    }
     function randomBytes(length){
       const arr = new Uint8Array(length);
       if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
@@ -122,7 +128,7 @@ Scopes requested for review: user.info.basic, video.upload, video.publish</div>
     }
     connectBtn.addEventListener('click', async () => {
       const clientKey = document.getElementById('clientKey').value.trim();
-      const redirectUri = document.getElementById('redirectUri').value.trim() || 'http://localhost:1/';
+      const redirectUri = document.getElementById('redirectUri').value.trim() || 'https://hayancook-cloud.github.io/hayancook-policy/';
       if (!clientKey) {
         connectStatus.textContent = 'Status: TikTok Client Key is required before opening OAuth. Paste the Client Key from TikTok Developers, then click Connect again.';
         document.getElementById('clientKey').focus();
